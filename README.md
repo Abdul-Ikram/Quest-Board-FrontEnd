@@ -1,3 +1,57 @@
+
+# 🧭 Quest-Board
+
+**Quest-Board** is a task management frontend built with **React**. It enables uploaders to post tasks, users to complete them, and admins to review submissions. Approved tasks reward users with points, encouraging accountability and engagement through a rewarding experience.
+
+---
+
+## 🚀 Features
+
+- 📥 Uploaders submit tasks for users
+- ✅ Admins approve or reject completed tasks
+- 🎮 Users earn points for approved tasks
+- 🔄 Smooth workflow with a gamified touch
+- 🔐 Modular components ready for backend integration
+
+---
+
+## 📦 Tech Stack
+
+- **React** (Frontend UI)
+- **React Router** for navigation
+- **Tailwind CSS** or custom styling
+---
+
+## 🛠️ Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Abdul-Ikram/Quest-Board-FrontEnd.git
+cd Quest-Board-FrontEnd
+```
+
+### 2. Install Dependencies
+
+Make sure you have [Node.js](https://nodejs.org/) installed.
+
+```bash
+npm install
+```
+
+### 3. Start the Development Server
+
+```bash
+npm run dev
+```
+
+Or if using Create React App:
+
+```bash
+npm start
+```
+----------
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -48,3 +102,7 @@ export default tseslint.config({
   },
 })
 ```
+----------
+## 📌 Contributing
+
+Pull requests are welcome! Please ensure any changes follow the current coding style and include relevant updates.
