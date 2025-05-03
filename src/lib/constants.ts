@@ -159,3 +159,87 @@ export const testimonials = [
     image: CEO,
   },
 ];
+
+export type UserProfile = {
+  id: string;
+  name: string;
+  email: string;
+  imageUrl?: string;
+  notifications: number;
+};
+
+export const dummyUsers: UserProfile[] = [
+  {
+    id: "1",
+    name: "Alice Johnson",
+    email: "alice@example.com",
+    imageUrl: "https://i.pravatar.cc/150?img=1",
+    notifications: 3,
+  },
+  {
+    id: "2",
+    name: "Bob Smith",
+    email: "bob@example.com",
+    imageUrl: "https://i.pravatar.cc/150?img=2",
+    notifications: 7,
+  },
+  {
+    id: "3",
+    name: "Charlie Brown",
+    email: "charlie@example.com",
+    imageUrl: "https://i.pravatar.cc/150?img=3",
+    notifications: 2,
+  },
+  {
+    id: "4",
+    name: "Diana Ross",
+    email: "diana@example.com",
+    imageUrl: "https://i.pravatar.cc/150?img=4",
+    notifications: 9,
+  },
+  {
+    id: "5",
+    name: "Ethan Wright",
+    email: "ethan@example.com",
+    imageUrl: "https://i.pravatar.cc/150?img=5",
+    notifications: 5,
+  },
+];
+
+export const createdProfiles: UserProfile[] = [
+  {
+    id: "101",
+    name: "Frank Miller",
+    email: "frank@example.com",
+    imageUrl: "https://i.pravatar.cc/150?img=6",
+    notifications: 1,
+  },
+  {
+    id: "102",
+    name: "Grace Hopper",
+    email: "grace@example.com",
+    imageUrl: "https://i.pravatar.cc/150?img=7",
+    notifications: 4,
+  },
+  {
+    id: "103",
+    name: "Henry Ford",
+    email: "henry@example.com",
+    imageUrl: "https://i.pravatar.cc/150?img=8",
+    notifications: 8,
+  },
+  {
+    id: "104",
+    name: "Isla Fisher",
+    email: "isla@example.com",
+    imageUrl: "https://i.pravatar.cc/150?img=9",
+    notifications: 0,
+  },
+  {
+    id: "105",
+    name: "Jack Daniels",
+    email: "jack@example.com",
+    imageUrl: "https://i.pravatar.cc/150?img=10",
+    notifications: 6,
+  },
+];
