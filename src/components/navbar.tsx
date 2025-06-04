@@ -36,7 +36,7 @@ const Navbar = () => {
           { id: "", label: "Home" },
           { id: "task-list", label: "Task List" },
           { id: "levels", label: "Levels" },
-          { id: "profite", label: "Profite" },
+          { id: "profit", label: "Profit" },
           { id: "profile", label: "My" },
         ].map((item) => (
           <Link
