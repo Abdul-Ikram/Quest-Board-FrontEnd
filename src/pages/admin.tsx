@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import Dashboard from "@/components/dashboard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,7 +16,6 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserProfile, createdProfiles, dummyUsers } from "@/lib/constants";
-import Dashboard from "@/components/dashboard";
 
 type SortOption = "name-asc" | "name-desc" | "notif-asc" | "notif-desc";
 
@@ -185,7 +185,7 @@ const AdminProfile = () => {
                       <p className="text-sm text-muted-foreground">
                         {profile.email}
                       </p>
-                      <Badge className="mt-1 w-fit flex items-center justify-center">
+                      <Badge className="mt-1 flex w-fit items-center justify-center">
                         Notifications: {profile.notifications}
                       </Badge>
                     </div>
@@ -200,13 +200,13 @@ const AdminProfile = () => {
           </div>
         </TabsContent>
 
-          {/* Dashboard */}
+        {/* Dashboard */}
         <TabsContent value="dashboard">
           <Dashboard />
         </TabsContent>
       </Tabs>
     </div>
   );
-}
+};
 
 export default AdminProfile;

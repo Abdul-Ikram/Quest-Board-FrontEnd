@@ -30,7 +30,7 @@ const UploadTaskForm = () => {
           <div className="space-y-2">
             <Label htmlFor="title">Task Title</Label>
             <Select value={title} onValueChange={setTitle}>
-              <SelectTrigger className="w-full" >
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="YouTube" />
               </SelectTrigger>
               <SelectContent>
