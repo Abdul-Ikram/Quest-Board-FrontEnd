@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+
 import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -17,8 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import { Input } from "../ui/input";
-import { Switch } from "@/components/ui/switch";
 
 type User = {
   id: number;
@@ -37,7 +39,11 @@ const initialUsers: User[] = Array.from({ length: 47 }, (_, i) => ({
   active: i % 4 !== 3,
 }));
 
-type SortOption = "name-asc" | "name-desc" | "donebyuser-asc" | "donebyuser-desc";
+type SortOption =
+  | "name-asc"
+  | "name-desc"
+  | "donebyuser-asc"
+  | "donebyuser-desc";
 
 const sortUsers = (
   users: User[],
@@ -87,9 +93,7 @@ const UploaderDashboard = () => {
 
   const toggleActive = (id: number, checked: boolean) => {
     setUsers((prev) =>
-      prev.map((user) =>
-        user.id === id ? { ...user, active: checked } : user
-      )
+      prev.map((user) => (user.id === id ? { ...user, active: checked } : user))
     );
   };
 
@@ -148,23 +152,29 @@ const UploaderDashboard = () => {
                   <TableHead>Description</TableHead>
                   <TableHead>Done-by-User</TableHead>
                   <TableHead className="hidden sm:table-cell">Active</TableHead>
-                  <TableHead className="flex items-center mx-auto w-full justify-center">Actions</TableHead>
+                  <TableHead className="mx-auto flex w-full items-center justify-center">
+                    Actions
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {paginatedUsers.map((user) => (
                   <TableRow key={user.id}>
                     <TableCell>{user.title}</TableCell>
-                    <TableCell className="hidden lg:table-cell">{user.description}</TableCell>
+                    <TableCell className="hidden lg:table-cell">
+                      {user.description}
+                    </TableCell>
                     <TableCell>{user.donebyuser}</TableCell>
                     <TableCell className="hidden sm:table-cell">
                       <Switch
                         checked={user.active}
-                        onCheckedChange={(checked) => toggleActive(user.id, checked)}
+                        onCheckedChange={(checked) =>
+                          toggleActive(user.id, checked)
+                        }
                         className=""
                       />
                     </TableCell>
-                    <TableCell className="flex items-center mx-auto w-full justify-center">
+                    <TableCell className="mx-auto flex w-full items-center justify-center">
                       {/* <Pencil className="h-4 w-4 cursor-pointer" /> */}
                       <Trash2 className="h-4 w-4 cursor-pointer" />
                     </TableCell>
@@ -197,7 +207,9 @@ const UploaderDashboard = () => {
                     key={page}
                     variant="outline"
                     size="sm"
-                    className={currentPage === page ? "bg-primary text-white" : ""}
+                    className={
+                      currentPage === page ? "bg-primary text-white" : ""
+                    }
                     onClick={() => setCurrentPage(page)}
                   >
                     {page}
@@ -207,7 +219,9 @@ const UploaderDashboard = () => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
                 disabled={currentPage === totalPages}
               >
                 <ChevronRight className="h-4 w-4" />

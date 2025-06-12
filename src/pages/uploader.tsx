@@ -3,10 +3,7 @@ import UploaderProfile from "@/components/uploader/profile";
 import UploadTaskForm from "@/components/uploader/task-upload";
 import UploaderDashboard from "@/components/uploader/uploader-dashboard";
 
-
-
 const Uploader = () => {
-
   return (
     <div className="container mx-auto px-4 py-6">
       <h1 className="mb-4 text-2xl font-bold">Uploader</h1>
@@ -27,13 +24,13 @@ const Uploader = () => {
           <UploaderProfile />
         </TabsContent>
 
-          {/* Dashboard */}
+        {/* Dashboard */}
         <TabsContent value="dashboard">
           <UploaderDashboard />
         </TabsContent>
       </Tabs>
     </div>
   );
-}
+};
 
 export default Uploader;

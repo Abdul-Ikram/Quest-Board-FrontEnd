@@ -7,7 +7,7 @@ const Forgot = () => {
         <div className="flex w-full max-w-md flex-col items-center justify-center gap-8">
           {/* Branding */}
           <h1 className="text-4xl font-bold text-primary sm:text-5xl">
-           WebKamai
+            WebKamai
           </h1>
 
           {/* Heading */}
