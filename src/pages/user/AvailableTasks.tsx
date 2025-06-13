@@ -23,7 +23,7 @@ export function AvailableTasks() {
   });
 
   const availableTasks = tasks.filter(task => task.status === 'approved');
-  
+
   const filteredTasks = availableTasks.filter(task =>
     task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -104,7 +104,7 @@ export function AvailableTasks() {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -127,8 +127,8 @@ export function AvailableTasks() {
               <div>
                 <p className="text-sm font-medium text-gray-600">Avg. Reward</p>
                 <p className="text-2xl font-bold">
-                  ${availableTasks.length > 0 ? 
-                    Math.round(availableTasks.reduce((sum, task) => sum + task.reward, 0) / availableTasks.length) : 
+                  ${availableTasks.length > 0 ?
+                    Math.round(availableTasks.reduce((sum, task) => sum + task.reward, 0) / availableTasks.length) :
                     0}
                 </p>
               </div>
@@ -160,7 +160,7 @@ export function AvailableTasks() {
       {/* Tasks Grid */}
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">Tasks Ready to Complete</h2>
-        
+
         {filteredTasks.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredTasks.map((task) => (
@@ -181,7 +181,7 @@ export function AvailableTasks() {
                 {searchQuery ? 'No matching tasks found' : 'No tasks available'}
               </h3>
               <p className="text-gray-600">
-                {searchQuery 
+                {searchQuery
                   ? 'Try adjusting your search terms or clearing filters'
                   : 'Check back later for new tasks to complete'
                 }
@@ -200,7 +200,7 @@ export function AvailableTasks() {
               Submit your completed work for review
             </DialogDescription>
           </DialogHeader>
-          
+
           {selectedTask && (
             <div className="space-y-4">
               <div className="space-y-2">
@@ -257,7 +257,7 @@ export function AvailableTasks() {
                       Upload Screenshot
                     </Button>
                   </div>
-                  
+
                   {submissionData.screenshotUrl && (
                     <div className="space-y-2">
                       <p className="text-sm text-green-600">Screenshot uploaded successfully!</p>

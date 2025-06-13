@@ -121,15 +121,15 @@ export function Sidebar() {
             <p className="text-xs text-gray-500 truncate">{user.email}</p>
           </div>
         </div>
-        
+
         <div className="space-y-1">
           <Button variant="ghost" size="sm" className="w-full justify-start">
             <Settings className="w-4 h-4 mr-2" />
             Settings
           </Button>
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
             onClick={logout}
           >

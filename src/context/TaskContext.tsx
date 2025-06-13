@@ -72,8 +72,8 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateTaskStatus = (taskId: string, status: Task['status']) => {
-    setTasks(prev => prev.map(task => 
-      task.id === taskId 
+    setTasks(prev => prev.map(task =>
+      task.id === taskId
         ? { ...task, status, updatedAt: new Date().toISOString() }
         : task
     ));
@@ -90,8 +90,8 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   };
 
   const auditSubmission = (submissionId: string, status: 'approved' | 'rejected', notes?: string) => {
-    setSubmissions(prev => prev.map(submission => 
-      submission.id === submissionId 
+    setSubmissions(prev => prev.map(submission =>
+      submission.id === submissionId
         ? { ...submission, status, auditNotes: notes }
         : submission
     ));

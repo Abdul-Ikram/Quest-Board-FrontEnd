@@ -15,14 +15,14 @@ export function MyTasks() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const myTasks = tasks.filter(task => task.uploaderId === user?.id);
-  
+
   const filterTasks = (status?: string) => {
     let filtered = myTasks;
-    
+
     if (status) {
       filtered = filtered.filter(task => task.status === status);
     }
-    
+
     if (searchQuery) {
       filtered = filtered.filter(task =>
         task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -30,7 +30,7 @@ export function MyTasks() {
         task.category.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-    
+
     return filtered;
   };
 

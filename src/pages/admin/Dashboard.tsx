@@ -4,12 +4,12 @@ import { useTask } from '@/context/TaskContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { 
-  Shield, 
-  FileText, 
-  Clock, 
-  CheckCircle, 
-  Users, 
+import {
+  Shield,
+  FileText,
+  Clock,
+  CheckCircle,
+  Users,
   DollarSign,
   TrendingUp,
   AlertTriangle

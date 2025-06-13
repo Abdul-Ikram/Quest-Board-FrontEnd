@@ -8,11 +8,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { toast } from '@/hooks/use-toast';
-import { 
-  Eye, 
-  CheckCircle, 
-  XCircle, 
-  ExternalLink, 
+import {
+  Eye,
+  CheckCircle,
+  XCircle,
+  ExternalLink,
   Calendar,
   User,
   FileText,
@@ -29,7 +29,7 @@ export function AuditTasks() {
 
   const myTasks = tasks.filter(task => task.uploaderId === user?.id);
   const submittedTasks = myTasks.filter(task => task.status === 'submitted');
-  
+
   const getSubmissionForTask = (taskId: string) => {
     return submissions.find(sub => sub.taskId === taskId && sub.status === 'submitted');
   };
@@ -85,7 +85,7 @@ export function AuditTasks() {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -120,7 +120,7 @@ export function AuditTasks() {
       {/* Submissions to Review */}
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">Submissions Awaiting Review</h2>
-        
+
         {submittedTasks.length > 0 ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {submittedTasks.map((task) => {
@@ -139,7 +139,7 @@ export function AuditTasks() {
                       </Badge>
                     </div>
                   </CardHeader>
-                  
+
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center text-gray-600">
@@ -228,7 +228,7 @@ export function AuditTasks() {
               Carefully review the submission and provide feedback
             </DialogDescription>
           </DialogHeader>
-          
+
           {selectedSubmission && (
             <div className="space-y-4">
               <div className="space-y-2">
