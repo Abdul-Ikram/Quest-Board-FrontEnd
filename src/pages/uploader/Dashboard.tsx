@@ -4,12 +4,12 @@ import { useTask } from '@/context/TaskContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { 
-  Plus, 
-  FileText, 
-  Eye, 
-  CheckCircle, 
-  DollarSign, 
+import {
+  Plus,
+  FileText,
+  Eye,
+  CheckCircle,
+  DollarSign,
   TrendingUp,
   Clock,
   Users
@@ -25,7 +25,7 @@ export function UploaderDashboard() {
   const approvedTasks = myTasks.filter(task => task.status === 'approved');
   const submittedTasks = myTasks.filter(task => task.status === 'submitted');
   const completedTasks = myTasks.filter(task => task.status === 'completed');
-  
+
   const totalRewards = completedTasks.reduce((sum, task) => sum + task.reward, 0);
 
   const stats = [

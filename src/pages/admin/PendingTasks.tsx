@@ -7,7 +7,7 @@ import { Clock, CheckCircle, XCircle } from 'lucide-react';
 
 export function PendingTasks() {
   const { tasks, updateTaskStatus } = useTask();
-  
+
   const pendingTasks = tasks.filter(task => task.status === 'pending');
 
   const handleTaskAction = (action: string, task: any) => {
@@ -50,7 +50,7 @@ export function PendingTasks() {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -73,8 +73,8 @@ export function PendingTasks() {
               <div>
                 <p className="text-sm font-medium text-gray-600">Avg. Reward</p>
                 <p className="text-2xl font-bold">
-                  ${pendingTasks.length > 0 ? 
-                    Math.round(pendingTasks.reduce((sum, task) => sum + task.reward, 0) / pendingTasks.length) : 
+                  ${pendingTasks.length > 0 ?
+                    Math.round(pendingTasks.reduce((sum, task) => sum + task.reward, 0) / pendingTasks.length) :
                     0}
                 </p>
               </div>
@@ -89,7 +89,7 @@ export function PendingTasks() {
       {/* Pending Tasks */}
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">Tasks Awaiting Approval</h2>
-        
+
         {pendingTasks.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {pendingTasks.map((task) => (

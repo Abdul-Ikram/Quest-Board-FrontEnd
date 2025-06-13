@@ -26,7 +26,7 @@ export function AddTask() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { addTask } = useTask();
-  
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -85,7 +85,7 @@ export function AddTask() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!user) return;
 
     const taskData = {

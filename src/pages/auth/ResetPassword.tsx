@@ -179,12 +179,12 @@ export function ResetPassword() {
                                         ].map(({ key, text }) => (
                                             <div key={key} className="flex items-center space-x-2">
                                                 <div className={`w-2 h-2 rounded-full ${passwordStrength[key as keyof typeof passwordStrength]
-                                                        ? 'bg-green-500'
-                                                        : 'bg-gray-300'
+                                                    ? 'bg-green-500'
+                                                    : 'bg-gray-300'
                                                     }`} />
                                                 <span className={`text-xs ${passwordStrength[key as keyof typeof passwordStrength]
-                                                        ? 'text-green-600'
-                                                        : 'text-gray-500'
+                                                    ? 'text-green-600'
+                                                    : 'text-gray-500'
                                                     }`}>
                                                     {text}
                                                 </span>

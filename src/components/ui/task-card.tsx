@@ -5,10 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Task } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
-import { 
-  Clock, 
-  DollarSign, 
-  User, 
+import {
+  Clock,
+  DollarSign,
+  User,
   Tag,
   CheckCircle,
   XCircle,
