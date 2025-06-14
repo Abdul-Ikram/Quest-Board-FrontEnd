@@ -96,8 +96,12 @@ export function Sidebar() {
               cn(
                 "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-gray-100 text-blue"
+                  // ? "bg-blue-100 text-black"
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                // isActive
+                //   ? "bg-primary text-primary-foreground"
+                //   : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
               )
             }
           >
