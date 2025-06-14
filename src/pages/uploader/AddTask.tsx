@@ -175,7 +175,7 @@ export function AddTask() {
                 name="category"
                 value={formData.category}
                 onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
                 <option value="">Select a category</option>
@@ -293,10 +293,16 @@ export function AddTask() {
 
         {/* Actions */}
         <div className="flex justify-end space-x-4 mt-6">
-          <Button type="button" variant="outline" onClick={() => navigate('/uploader')}>
+          <Button
+            type="button" variant="outline" onClick={() => navigate('/uploader')}
+            // className="bg-red-400 text-black hover:bg-red-200 dark:bg-red-800 dark:hover:bg-red-700 hover:border-red-900"
+          >
             Cancel
           </Button>
-          <Button type="submit">
+          <Button
+            type="submit"
+            // className="bg-blue-300 text-black hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 hover:border-blue-900"
+          >
             Create Task
           </Button>
         </div>
