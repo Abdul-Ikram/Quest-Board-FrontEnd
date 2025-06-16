@@ -6,23 +6,24 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { toast } from '@/hooks/use-toast';
 import { Search, Filter, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function MyTasks() {
   const { user } = useAuth();
-  const { tasks } = useTask();
+  const { tasks, unassignTask } = useTask();
   const [searchQuery, setSearchQuery] = useState('');
 
   const myTasks = tasks.filter(task => task.uploaderId === user?.id);
-
+  
   const filterTasks = (status?: string) => {
     let filtered = myTasks;
-
+    
     if (status) {
       filtered = filtered.filter(task => task.status === status);
     }
-
+    
     if (searchQuery) {
       filtered = filtered.filter(task =>
         task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -30,8 +31,18 @@ export function MyTasks() {
         task.category.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-
+    
     return filtered;
+  };
+
+  const handleTaskAction = (action: string, task: any) => {
+    if (action === 'unassign') {
+      unassignTask(task.id);
+      toast({
+        title: "Task unassigned",
+        description: "The task has been made available to all users again.",
+      });
+    }
   };
 
   const statusCounts = {
@@ -142,7 +153,13 @@ export function MyTasks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterTasks().length > 0 ? (
               filterTasks().map((task) => (
-                <TaskCard key={task.id} task={task} />
+                <TaskCard 
+                  key={task.id} 
+                  task={task} 
+                  onAction={handleTaskAction}
+                  showActions={true}
+                  actionType="uploader"
+                />
               ))
             ) : (
               <div className="col-span-full text-center py-12">
@@ -156,7 +173,13 @@ export function MyTasks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterTasks('pending').length > 0 ? (
               filterTasks('pending').map((task) => (
-                <TaskCard key={task.id} task={task} />
+                <TaskCard 
+                  key={task.id} 
+                  task={task} 
+                  onAction={handleTaskAction}
+                  showActions={true}
+                  actionType="uploader"
+                />
               ))
             ) : (
               <div className="col-span-full text-center py-12">
@@ -170,7 +193,13 @@ export function MyTasks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterTasks('approved').length > 0 ? (
               filterTasks('approved').map((task) => (
-                <TaskCard key={task.id} task={task} />
+                <TaskCard 
+                  key={task.id} 
+                  task={task} 
+                  onAction={handleTaskAction}
+                  showActions={true}
+                  actionType="uploader"
+                />
               ))
             ) : (
               <div className="col-span-full text-center py-12">
@@ -184,7 +213,13 @@ export function MyTasks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterTasks('in_progress').length > 0 ? (
               filterTasks('in_progress').map((task) => (
-                <TaskCard key={task.id} task={task} />
+                <TaskCard 
+                  key={task.id} 
+                  task={task} 
+                  onAction={handleTaskAction}
+                  showActions={true}
+                  actionType="uploader"
+                />
               ))
             ) : (
               <div className="col-span-full text-center py-12">
@@ -198,7 +233,13 @@ export function MyTasks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterTasks('submitted').length > 0 ? (
               filterTasks('submitted').map((task) => (
-                <TaskCard key={task.id} task={task} />
+                <TaskCard 
+                  key={task.id} 
+                  task={task} 
+                  onAction={handleTaskAction}
+                  showActions={true}
+                  actionType="uploader"
+                />
               ))
             ) : (
               <div className="col-span-full text-center py-12">
@@ -212,7 +253,13 @@ export function MyTasks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterTasks('completed').length > 0 ? (
               filterTasks('completed').map((task) => (
-                <TaskCard key={task.id} task={task} />
+                <TaskCard 
+                  key={task.id} 
+                  task={task} 
+                  onAction={handleTaskAction}
+                  showActions={true}
+                  actionType="uploader"
+                />
               ))
             ) : (
               <div className="col-span-full text-center py-12">
@@ -226,7 +273,13 @@ export function MyTasks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterTasks('rejected').length > 0 ? (
               filterTasks('rejected').map((task) => (
-                <TaskCard key={task.id} task={task} />
+                <TaskCard 
+                  key={task.id} 
+                  task={task} 
+                  onAction={handleTaskAction}
+                  showActions={true}
+                  actionType="uploader"
+                />
               ))
             ) : (
               <div className="col-span-full text-center py-12">

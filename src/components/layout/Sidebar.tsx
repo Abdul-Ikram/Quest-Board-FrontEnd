@@ -1,9 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { useTask } from '@/context/TaskContext';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 import {
   LayoutGrid,
   Plus,
@@ -15,6 +17,7 @@ import {
   Upload,
   Eye,
   Clipboard,
+  Wallet,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -24,6 +27,7 @@ const uploaderLinks = [
   { to: '/uploader/my-tasks', icon: FileText, label: 'My Tasks' },
   { to: '/uploader/audit', icon: Eye, label: 'Audit Tasks' },
   { to: '/uploader/completed', icon: CheckCircle, label: 'Completed' },
+  { to: '/uploader/wallet', icon: Wallet, label: 'Wallet' },
 ];
 
 const adminLinks = [
@@ -38,12 +42,16 @@ const userLinks = [
   { to: '/user/tasks', icon: FileText, label: 'Available Tasks' },
   { to: '/user/submissions', icon: Upload, label: 'My Submissions' },
   { to: '/user/completed', icon: CheckCircle, label: 'Completed' },
+  { to: '/user/wallet', icon: Wallet, label: 'Wallet' },
 ];
 
 export function Sidebar() {
   const { user, logout } = useAuth();
+  const { getUserBalance } = useTask();
 
   if (!user) return null;
+
+  const userBalance = getUserBalance(user.id);
 
   const getLinks = () => {
     switch (user.role) {
@@ -86,6 +94,21 @@ export function Sidebar() {
         </div>
       </div>
 
+      {/* Wallet Balance */}
+      {user.role !== 'admin' && (
+        <div className="p-4 border-b border-gray-200 dark:border-gray-800">
+          <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="flex items-center space-x-2">
+              <Wallet className="w-4 h-4 text-green-600" />
+              <span className="text-sm font-medium">Balance</span>
+            </div>
+            <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+              ${userBalance}
+            </Badge>
+          </div>
+        </div>
+      )}
+
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-2">
         {getLinks().map((link) => (
@@ -96,12 +119,8 @@ export function Sidebar() {
               cn(
                 "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-gray-100 text-blue"
-                  // ? "bg-blue-100 text-black"
+                  ? "bg-primary text-primary-foreground"
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                // isActive
-                //   ? "bg-primary text-primary-foreground"
-                //   : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
               )
             }
           >
@@ -125,15 +144,15 @@ export function Sidebar() {
             <p className="text-xs text-gray-500 truncate">{user.email}</p>
           </div>
         </div>
-
+        
         <div className="space-y-1">
           <Button variant="ghost" size="sm" className="w-full justify-start">
             <Settings className="w-4 h-4 mr-2" />
             Settings
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
+          <Button 
+            variant="ghost" 
+            size="sm" 
             className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
             onClick={logout}
           >

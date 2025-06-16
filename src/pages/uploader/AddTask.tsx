@@ -8,8 +8,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { toast } from '@/hooks/use-toast';
-import { Plus, X, DollarSign, FileText, Tag, List } from 'lucide-react';
+import { Plus, X, DollarSign, FileText, Tag, List, Users, User, Wallet, AlertTriangle } from 'lucide-react';
 
 const categories = [
   'Content Creation',
@@ -25,7 +27,7 @@ const categories = [
 export function AddTask() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { addTask } = useTask();
+  const { addTask, getUserBalance } = useTask();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -34,7 +36,14 @@ export function AddTask() {
     reward: '',
     requirements: [''],
     tags: [''],
+    taskType: 'single' as 'single' | 'multiple',
+    maxCompletions: '1',
   });
+
+  const userBalance = user ? getUserBalance(user.id) : 0;
+  const totalCost = formData.taskType === 'single'
+    ? parseFloat(formData.reward) || 0
+    : (parseFloat(formData.reward) || 0) * (parseInt(formData.maxCompletions) || 1);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
@@ -88,26 +97,45 @@ export function AddTask() {
 
     if (!user) return;
 
-    const taskData = {
-      title: formData.title,
-      description: formData.description,
-      category: formData.category,
-      reward: parseFloat(formData.reward),
-      uploaderId: user.id,
-      uploaderName: user.name,
-      status: 'pending' as const,
-      requirements: formData.requirements.filter(req => req.trim() !== ''),
-      tags: formData.tags.filter(tag => tag.trim() !== ''),
-    };
+    if (totalCost > userBalance) {
+      toast({
+        title: "Insufficient balance",
+        description: `You need $${totalCost} but only have $${userBalance}. Please add funds to your wallet.`,
+        variant: "destructive",
+      });
+      return;
+    }
 
-    addTask(taskData);
+    try {
+      const taskData = {
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+        reward: parseFloat(formData.reward),
+        uploaderId: user.id,
+        uploaderName: user.name,
+        status: 'pending' as const,
+        requirements: formData.requirements.filter(req => req.trim() !== ''),
+        tags: formData.tags.filter(tag => tag.trim() !== ''),
+        taskType: formData.taskType,
+        maxCompletions: formData.taskType === 'multiple' ? parseInt(formData.maxCompletions) : 1,
+      };
 
-    toast({
-      title: "Task created successfully!",
-      description: "Your task has been submitted for admin approval.",
-    });
+      addTask(taskData);
 
-    navigate('/uploader/my-tasks');
+      toast({
+        title: "Task created successfully!",
+        description: `Your task has been submitted for admin approval. $${totalCost} has been held in escrow.`,
+      });
+
+      navigate('/uploader/my-tasks');
+    } catch (error: any) {
+      toast({
+        title: "Failed to create task",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -117,6 +145,34 @@ export function AddTask() {
         <h1 className="text-3xl font-bold">Create New Task</h1>
         <p className="text-gray-600">Add a new task for workers to complete</p>
       </div>
+
+      {/* Wallet Balance Alert */}
+      <Card className="border-blue-200 bg-blue-50">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Wallet className="w-5 h-5 text-blue-600" />
+              <span className="font-medium">Wallet Balance: ${userBalance}</span>
+            </div>
+            {totalCost > 0 && (
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600">Total Cost:</span>
+                <Badge className={totalCost > userBalance ? "bg-red-500" : "bg-green-500"}>
+                  ${totalCost}
+                </Badge>
+              </div>
+            )}
+          </div>
+          {totalCost > userBalance && totalCost > 0 && (
+            <Alert className="mt-3 border-red-200 bg-red-50">
+              <AlertTriangle className="w-4 h-4" />
+              <AlertDescription className="text-red-800">
+                Insufficient balance. You need ${totalCost - userBalance} more to create this task.
+              </AlertDescription>
+            </Alert>
+          )}
+        </CardContent>
+      </Card>
 
       <form onSubmit={handleSubmit}>
         <Card>
@@ -130,6 +186,68 @@ export function AddTask() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
+            {/* Task Type Selection */}
+            <div className="space-y-3">
+              <Label>Task Assignment Type</Label>
+              <RadioGroup
+                value={formData.taskType}
+                onValueChange={(value: 'single' | 'multiple') =>
+                  setFormData(prev => ({ ...prev, taskType: value, maxCompletions: value === 'single' ? '1' : '5' }))
+                }
+                className="space-y-3"
+              >
+                <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 transition-colors">
+                  <RadioGroupItem value="single" id="single" />
+                  <div className="flex items-center space-x-3 flex-1">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <User className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <div>
+                      <Label htmlFor="single" className="font-medium cursor-pointer">
+                        Single Person Task
+                      </Label>
+                      <p className="text-sm text-gray-600">Only one person can work on this task</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 transition-colors">
+                  <RadioGroupItem value="multiple" id="multiple" />
+                  <div className="flex items-center space-x-3 flex-1">
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <Users className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div>
+                      <Label htmlFor="multiple" className="font-medium cursor-pointer">
+                        Multiple Person Task
+                      </Label>
+                      <p className="text-sm text-gray-600">Multiple people can complete this task</p>
+                    </div>
+                  </div>
+                </div>
+              </RadioGroup>
+            </div>
+
+            {/* Max Completions for Multiple Tasks */}
+            {formData.taskType === 'multiple' && (
+              <div className="space-y-2">
+                <Label htmlFor="maxCompletions">Maximum Completions</Label>
+                <Input
+                  id="maxCompletions"
+                  name="maxCompletions"
+                  type="number"
+                  placeholder="How many people can complete this task?"
+                  value={formData.maxCompletions}
+                  onChange={handleInputChange}
+                  min="1"
+                  max="100"
+                  required
+                />
+                <p className="text-xs text-gray-500">
+                  Total cost will be: ${parseFloat(formData.reward) || 0} × {formData.maxCompletions} = ${totalCost}
+                </p>
+              </div>
+            )}
+
             {/* Basic Information */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="space-y-2">
@@ -149,7 +267,7 @@ export function AddTask() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="reward">Reward ($) *</Label>
+                <Label htmlFor="reward">Reward per Completion ($) *</Label>
                 <div className="relative">
                   <DollarSign className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
                   <Input
@@ -175,7 +293,7 @@ export function AddTask() {
                 name="category"
                 value={formData.category}
                 onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
                 <option value="">Select a category</option>
@@ -281,10 +399,18 @@ export function AddTask() {
                     )}
                     {formData.reward && (
                       <Badge className="bg-green-100 text-green-800">
-                        ${formData.reward}
+                        ${formData.reward} each
                       </Badge>
                     )}
+                    <Badge className={formData.taskType === 'single' ? "bg-blue-100 text-blue-800" : "bg-purple-100 text-purple-800"}>
+                      {formData.taskType === 'single' ? 'Single Person' : `${formData.maxCompletions} People`}
+                    </Badge>
                   </div>
+                  {totalCost > 0 && (
+                    <div className="text-sm text-gray-600">
+                      <strong>Total Cost: ${totalCost}</strong>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -293,17 +419,11 @@ export function AddTask() {
 
         {/* Actions */}
         <div className="flex justify-end space-x-4 mt-6">
-          <Button
-            type="button" variant="outline" onClick={() => navigate('/uploader')}
-            // className="bg-red-400 text-black hover:bg-red-200 dark:bg-red-800 dark:hover:bg-red-700 hover:border-red-900"
-          >
+          <Button type="button" variant="outline" onClick={() => navigate('/uploader')}>
             Cancel
           </Button>
-          <Button
-            type="submit"
-            // className="bg-blue-300 text-black hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 hover:border-blue-900"
-          >
-            Create Task
+          <Button type="submit" disabled={totalCost > userBalance}>
+            {totalCost > userBalance ? 'Insufficient Balance' : 'Create Task'}
           </Button>
         </div>
       </form>

@@ -9,11 +9,11 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
-import { Search, Filter, Target, Upload, Camera, FileText } from 'lucide-react';
+import { Search, Filter, Target, Upload, Camera, FileText, User, Users } from 'lucide-react';
 
 export function AvailableTasks() {
   const { user } = useAuth();
-  const { tasks, submitTask } = useTask();
+  const { tasks, submitTask, assignTask } = useTask();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTask, setSelectedTask] = useState<any>(null);
   const [showSubmissionDialog, setShowSubmissionDialog] = useState(false);
@@ -22,8 +22,16 @@ export function AvailableTasks() {
     screenshotUrl: '',
   });
 
-  const availableTasks = tasks.filter(task => task.status === 'approved');
-
+  const availableTasks = tasks.filter(task => {
+    if (task.status !== 'approved') return false;
+    
+    if (task.taskType === 'single') {
+      return !task.assignedUserId; // Only show if not assigned
+    } else {
+      return (task.currentCompletions || 0) < (task.maxCompletions || 1); // Show if not fully completed
+    }
+  });
+  
   const filteredTasks = availableTasks.filter(task =>
     task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -32,6 +40,17 @@ export function AvailableTasks() {
 
   const handleTaskAction = (action: string, task: any) => {
     if (action === 'start') {
+      if (!user) return;
+
+      // For single-person tasks, assign the task to the user first
+      if (task.taskType === 'single') {
+        assignTask(task.id, user.id, user.name);
+        toast({
+          title: "Task assigned!",
+          description: "This task has been assigned to you. Complete it to earn the reward.",
+        });
+      }
+
       setSelectedTask(task);
       setSubmissionData({ text: '', screenshotUrl: '' });
       setShowSubmissionDialog(true);
@@ -57,6 +76,7 @@ export function AvailableTasks() {
       submissionText: submissionData.text || undefined,
       screenshotUrl: submissionData.screenshotUrl || undefined,
       status: 'submitted',
+      rewardAmount: selectedTask.reward,
     });
 
     toast({
@@ -81,6 +101,9 @@ export function AvailableTasks() {
     }
   };
 
+  const singlePersonTasks = filteredTasks.filter(task => task.taskType === 'single');
+  const multiplePersonTasks = filteredTasks.filter(task => task.taskType === 'multiple');
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -90,7 +113,7 @@ export function AvailableTasks() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -100,6 +123,34 @@ export function AvailableTasks() {
               </div>
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                 <Target className="w-6 h-6 text-blue-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Single Person</p>
+                <p className="text-2xl font-bold">{singlePersonTasks.length}</p>
+              </div>
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                <User className="w-6 h-6 text-blue-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Multiple Person</p>
+                <p className="text-2xl font-bold">{multiplePersonTasks.length}</p>
+              </div>
+              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                <Users className="w-6 h-6 text-green-600" />
               </div>
             </div>
           </CardContent>
@@ -116,24 +167,6 @@ export function AvailableTasks() {
               </div>
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                 <Upload className="w-6 h-6 text-green-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Avg. Reward</p>
-                <p className="text-2xl font-bold">
-                  ${availableTasks.length > 0 ?
-                    Math.round(availableTasks.reduce((sum, task) => sum + task.reward, 0) / availableTasks.length) :
-                    0}
-                </p>
-              </div>
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <FileText className="w-6 h-6 text-purple-600" />
               </div>
             </div>
           </CardContent>
@@ -158,22 +191,53 @@ export function AvailableTasks() {
       </div>
 
       {/* Tasks Grid */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Tasks Ready to Complete</h2>
-
-        {filteredTasks.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredTasks.map((task) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                onAction={handleTaskAction}
-                showActions={true}
-                actionType="user"
-              />
-            ))}
+      <div className="space-y-6">
+        {/* Single Person Tasks */}
+        {singlePersonTasks.length > 0 && (
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <User className="w-5 h-5 text-blue-600" />
+              <h2 className="text-xl font-semibold">Single Person Tasks</h2>
+              <span className="text-sm text-gray-500">({singlePersonTasks.length} available)</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {singlePersonTasks.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onAction={handleTaskAction}
+                  showActions={true}
+                  actionType="user"
+                />
+              ))}
+            </div>
           </div>
-        ) : (
+        )}
+
+        {/* Multiple Person Tasks */}
+        {multiplePersonTasks.length > 0 && (
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <Users className="w-5 h-5 text-green-600" />
+              <h2 className="text-xl font-semibold">Multiple Person Tasks</h2>
+              <span className="text-sm text-gray-500">({multiplePersonTasks.length} available)</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {multiplePersonTasks.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onAction={handleTaskAction}
+                  showActions={true}
+                  actionType="user"
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* No Tasks Available */}
+        {filteredTasks.length === 0 && (
           <Card>
             <CardContent className="text-center py-12">
               <Target className="w-12 h-12 text-gray-400 mx-auto mb-4" />
@@ -181,7 +245,7 @@ export function AvailableTasks() {
                 {searchQuery ? 'No matching tasks found' : 'No tasks available'}
               </h3>
               <p className="text-gray-600">
-                {searchQuery
+                {searchQuery 
                   ? 'Try adjusting your search terms or clearing filters'
                   : 'Check back later for new tasks to complete'
                 }
@@ -200,15 +264,23 @@ export function AvailableTasks() {
               Submit your completed work for review
             </DialogDescription>
           </DialogHeader>
-
+          
           {selectedTask && (
             <div className="space-y-4">
               <div className="space-y-2">
                 <h3 className="font-medium">{selectedTask.title}</h3>
                 <p className="text-sm text-gray-600">{selectedTask.description}</p>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-500">Reward:</span>
-                  <span className="font-medium text-green-600">${selectedTask.reward}</span>
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm text-gray-500">Reward:</span>
+                    <span className="font-medium text-green-600">${selectedTask.reward}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm text-gray-500">Type:</span>
+                    <span className="font-medium">
+                      {selectedTask.taskType === 'single' ? 'Single Person' : 'Multiple Person'}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -257,7 +329,7 @@ export function AvailableTasks() {
                       Upload Screenshot
                     </Button>
                   </div>
-
+                  
                   {submissionData.screenshotUrl && (
                     <div className="space-y-2">
                       <p className="text-sm text-green-600">Screenshot uploaded successfully!</p>
