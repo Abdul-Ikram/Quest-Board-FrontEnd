@@ -4,11 +4,11 @@ import { toast } from '@/hooks/use-toast';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock users for demo
+// Mock users for demo with wallet balances
 const mockUsers: User[] = [
-  { id: '1', email: 'admin@taskflow.com', name: 'Admin User', role: 'admin' },
-  { id: '2', email: 'uploader@taskflow.com', name: 'Task Creator', role: 'uploader' },
-  { id: '3', email: 'user@taskflow.com', name: 'Task Worker', role: 'user' },
+  { id: '1', email: 'admin@taskflow.com', name: 'Admin User', role: 'admin', walletBalance: 0 },
+  { id: '2', email: 'uploader@taskflow.com', name: 'Task Creator', role: 'uploader', walletBalance: 500 },
+  { id: '3', email: 'user@taskflow.com', name: 'Task Worker', role: 'user', walletBalance: 125 },
 ];
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -60,6 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         email,
         name,
         role,
+        walletBalance: role === 'uploader' ? 100 : 0, // Give uploaders starting balance
       };
       setUser(newUser);
       localStorage.setItem('taskflow_user', JSON.stringify(newUser));

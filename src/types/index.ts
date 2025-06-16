@@ -4,6 +4,7 @@ export interface User {
   name: string;
   role: 'uploader' | 'admin' | 'user';
   avatar?: string;
+  walletBalance: number;
 }
 
 export interface Task {
@@ -20,6 +21,12 @@ export interface Task {
   imageUrl?: string;
   requirements?: string[];
   tags?: string[];
+  taskType: 'single' | 'multiple'; // New field for task assignment type
+  assignedUserId?: string; // For single-person tasks
+  assignedUserName?: string; // For single-person tasks
+  maxCompletions?: number; // For multiple-person tasks
+  currentCompletions?: number; // For multiple-person tasks
+  isEscrowHeld: boolean; // Whether payment is held in escrow
 }
 
 export interface TaskSubmission {
@@ -32,6 +39,18 @@ export interface TaskSubmission {
   submittedAt: string;
   status: 'submitted' | 'approved' | 'rejected';
   auditNotes?: string;
+  rewardAmount: number; // Amount to be paid for this submission
+}
+
+export interface WalletTransaction {
+  id: string;
+  userId: string;
+  type: 'deposit' | 'withdrawal' | 'payment' | 'earning' | 'escrow_hold' | 'escrow_release';
+  amount: number;
+  description: string;
+  taskId?: string;
+  status: 'pending' | 'completed' | 'failed';
+  createdAt: string;
 }
 
 export interface AuthContextType {

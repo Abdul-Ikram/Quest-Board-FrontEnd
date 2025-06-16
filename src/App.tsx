@@ -17,6 +17,7 @@ import { UploaderDashboard } from '@/pages/uploader/Dashboard';
 import { AddTask } from '@/pages/uploader/AddTask';
 import { MyTasks } from '@/pages/uploader/MyTasks';
 import { AuditTasks } from '@/pages/uploader/AuditTasks';
+import { UploaderWallet } from '@/pages/uploader/Wallet';
 
 // Admin pages
 import { AdminDashboard } from '@/pages/admin/Dashboard';
@@ -25,6 +26,7 @@ import { PendingTasks } from '@/pages/admin/PendingTasks';
 // User pages
 import { UserDashboard } from '@/pages/user/Dashboard';
 import { AvailableTasks } from '@/pages/user/AvailableTasks';
+import { UserWallet } from '@/pages/user/Wallet';
 
 function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode; allowedRoles: string[] }) {
   const { user, loading } = useAuth();
@@ -66,126 +68,142 @@ function AppRoutes() {
       {/* Protected routes */}
       <Route path="/" element={<Layout />}>
         {/* Default redirect based on user role */}
-        <Route
-          index
+        <Route 
+          index 
           element={
             user ? (
               <Navigate to={`/${user.role}`} replace />
             ) : (
               <Navigate to="/login" replace />
             )
-          }
+          } 
         />
 
         {/* Uploader routes */}
-        <Route
-          path="/uploader"
+        <Route 
+          path="/uploader" 
           element={
             <ProtectedRoute allowedRoles={['uploader']}>
               <UploaderDashboard />
             </ProtectedRoute>
-          }
+          } 
         />
-        <Route
-          path="/uploader/add-task"
+        <Route 
+          path="/uploader/add-task" 
           element={
             <ProtectedRoute allowedRoles={['uploader']}>
               <AddTask />
             </ProtectedRoute>
-          }
+          } 
         />
-        <Route
-          path="/uploader/my-tasks"
+        <Route 
+          path="/uploader/my-tasks" 
           element={
             <ProtectedRoute allowedRoles={['uploader']}>
               <MyTasks />
             </ProtectedRoute>
-          }
+          } 
         />
-        <Route
-          path="/uploader/audit"
+        <Route 
+          path="/uploader/audit" 
           element={
             <ProtectedRoute allowedRoles={['uploader']}>
               <AuditTasks />
             </ProtectedRoute>
-          }
+          } 
         />
-        <Route
-          path="/uploader/completed"
+        <Route 
+          path="/uploader/completed" 
           element={
             <ProtectedRoute allowedRoles={['uploader']}>
               <MyTasks />
             </ProtectedRoute>
-          }
+          } 
+        />
+        <Route 
+          path="/uploader/wallet" 
+          element={
+            <ProtectedRoute allowedRoles={['uploader']}>
+              <UploaderWallet />
+            </ProtectedRoute>
+          } 
         />
 
         {/* Admin routes */}
-        <Route
-          path="/admin"
+        <Route 
+          path="/admin" 
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <AdminDashboard />
             </ProtectedRoute>
-          }
+          } 
         />
-
-        <Route
-          path="/admin/pending"
+        
+        <Route 
+          path="/admin/pending" 
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <PendingTasks />
             </ProtectedRoute>
-          }
+          } 
         />
-        <Route
-          path="/admin/approved"
+        <Route 
+          path="/admin/approved" 
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <PendingTasks />
             </ProtectedRoute>
-          }
+          } 
         />
-        <Route
-          path="/admin/users"
+        <Route 
+          path="/admin/users" 
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <AdminDashboard />
             </ProtectedRoute>
-          }
+          } 
         />
 
         {/* User routes */}
-        <Route
-          path="/user"
+        <Route 
+          path="/user" 
           element={
             <ProtectedRoute allowedRoles={['user']}>
               <UserDashboard />
             </ProtectedRoute>
-          }
+          } 
         />
-        <Route
-          path="/user/tasks"
+        <Route 
+          path="/user/tasks" 
           element={
             <ProtectedRoute allowedRoles={['user']}>
               <AvailableTasks />
             </ProtectedRoute>
-          }
+          } 
         />
-        <Route
-          path="/user/submissions"
+        <Route 
+          path="/user/submissions" 
           element={
             <ProtectedRoute allowedRoles={['user']}>
               <UserDashboard />
             </ProtectedRoute>
-          }
+          } 
         />
-        <Route
-          path="/user/completed"
+        <Route 
+          path="/user/completed" 
           element={
             <ProtectedRoute allowedRoles={['user']}>
               <UserDashboard />
             </ProtectedRoute>
-          }
+          } 
+        />
+        <Route 
+          path="/user/wallet" 
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <UserWallet />
+            </ProtectedRoute>
+          } 
         />
       </Route>
 

@@ -1,22 +1,21 @@
 import React from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Task } from '@/types';
-import { formatDistanceToNow } from 'date-fns';
-import {
+import { 
+  Calendar, 
+  DollarSign, 
+  User, 
+  Users, 
+  CheckCircle, 
+  XCircle, 
+  Play, 
   Clock,
-  DollarSign,
-  User,
-  Tag,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
   Eye,
-  Upload
+  UserX
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { formatDistanceToNow } from 'date-fns';
 
 interface TaskCardProps {
   task: Task;
@@ -25,21 +24,54 @@ interface TaskCardProps {
   actionType?: 'admin' | 'user' | 'uploader';
 }
 
-const statusConfig = {
-  pending: { color: 'bg-yellow-100 text-yellow-800', icon: AlertCircle },
-  approved: { color: 'bg-green-100 text-green-800', icon: CheckCircle },
-  in_progress: { color: 'bg-blue-100 text-blue-800', icon: Clock },
-  submitted: { color: 'bg-purple-100 text-purple-800', icon: Upload },
-  auditing: { color: 'bg-orange-100 text-orange-800', icon: Eye },
-  completed: { color: 'bg-emerald-100 text-emerald-800', icon: CheckCircle },
-  rejected: { color: 'bg-red-100 text-red-800', icon: XCircle },
-};
-
 export function TaskCard({ task, onAction, showActions = false, actionType }: TaskCardProps) {
-  const statusInfo = statusConfig[task.status];
-  const StatusIcon = statusInfo.icon;
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'approved':
+        return 'bg-green-100 text-green-800';
+      case 'in_progress':
+        return 'bg-blue-100 text-blue-800';
+      case 'submitted':
+        return 'bg-purple-100 text-purple-800';
+      case 'completed':
+        return 'bg-emerald-100 text-emerald-800';
+      case 'rejected':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
 
-  const getActionButtons = () => {
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return <Clock className="w-3 h-3" />;
+      case 'approved':
+        return <CheckCircle className="w-3 h-3" />;
+      case 'in_progress':
+        return <Play className="w-3 h-3" />;
+      case 'submitted':
+        return <Eye className="w-3 h-3" />;
+      case 'completed':
+        return <CheckCircle className="w-3 h-3" />;
+      case 'rejected':
+        return <XCircle className="w-3 h-3" />;
+      default:
+        return null;
+    }
+  };
+
+  const isTaskAvailable = () => {
+    if (task.taskType === 'single') {
+      return task.status === 'approved' && !task.assignedUserId;
+    } else {
+      return task.status === 'approved' && (task.currentCompletions || 0) < (task.maxCompletions || 1);
+    }
+  };
+
+  const renderActions = () => {
     if (!showActions || !onAction) return null;
 
     switch (actionType) {
@@ -47,11 +79,20 @@ export function TaskCard({ task, onAction, showActions = false, actionType }: Ta
         if (task.status === 'pending') {
           return (
             <div className="flex gap-2">
-              <Button size="sm" onClick={() => onAction('approve', task)}>
+              <Button
+                size="sm"
+                onClick={() => onAction('approve', task)}
+                className="flex-1"
+              >
                 <CheckCircle className="w-4 h-4 mr-1" />
                 Approve
               </Button>
-              <Button size="sm" variant="destructive" onClick={() => onAction('reject', task)}>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => onAction('reject', task)}
+                className="flex-1"
+              >
                 <XCircle className="w-4 h-4 mr-1" />
                 Reject
               </Button>
@@ -59,52 +100,62 @@ export function TaskCard({ task, onAction, showActions = false, actionType }: Ta
           );
         }
         break;
+
       case 'user':
-        if (task.status === 'approved') {
+        if (isTaskAvailable()) {
           return (
-            <Button size="sm" onClick={() => onAction('start', task)}>
-              <Upload className="w-4 h-4 mr-1" />
+            <Button
+              size="sm"
+              onClick={() => onAction('start', task)}
+              className="w-full"
+            >
+              <Play className="w-4 h-4 mr-1" />
               Start Task
             </Button>
           );
         }
         break;
+
       case 'uploader':
-        if (task.status === 'submitted') {
+        if (task.taskType === 'single' && task.assignedUserId && task.status === 'in_progress') {
           return (
-            <Button size="sm" onClick={() => onAction('audit', task)}>
-              <Eye className="w-4 h-4 mr-1" />
-              Review Submission
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => onAction('unassign', task)}
+              className="w-full"
+            >
+              <UserX className="w-4 h-4 mr-1" />
+              Unassign Task
             </Button>
           );
         }
         break;
     }
+
     return null;
   };
 
   return (
-    <Card className="hover:shadow-md transition-shadow duration-200">
+    <Card className="hover:shadow-md transition-shadow">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
-          <div className="space-y-1">
-            <CardTitle className="text-lg font-semibold">{task.title}</CardTitle>
-            <CardDescription className="text-sm text-gray-600">
-              {task.description}
-            </CardDescription>
+          <div className="space-y-1 flex-1">
+            <CardTitle className="text-lg line-clamp-2">{task.title}</CardTitle>
+            <CardDescription className="line-clamp-2">{task.description}</CardDescription>
           </div>
-          <Badge className={cn("text-xs font-medium", statusInfo.color)}>
-            <StatusIcon className="w-3 h-3 mr-1" />
-            {task.status.replace('_', ' ')}
+          <Badge className={getStatusColor(task.status)}>
+            {getStatusIcon(task.status)}
+            <span className="ml-1 capitalize">{task.status.replace('_', ' ')}</span>
           </Badge>
         </div>
       </CardHeader>
-
+      
       <CardContent className="space-y-4">
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center text-gray-600">
             <User className="w-4 h-4 mr-1" />
-            <span>by {task.uploaderName}</span>
+            <span>{task.uploaderName}</span>
           </div>
           <div className="flex items-center font-medium text-green-600">
             <DollarSign className="w-4 h-4 mr-1" />
@@ -112,48 +163,75 @@ export function TaskCard({ task, onAction, showActions = false, actionType }: Ta
           </div>
         </div>
 
-        <div className="flex items-center text-sm text-gray-500">
-          <Clock className="w-4 h-4 mr-1" />
-          <span>{formatDistanceToNow(new Date(task.createdAt), { addSuffix: true })}</span>
-        </div>
-
-        <div className="flex items-center">
-          <Tag className="w-4 h-4 mr-2 text-gray-400" />
-          <Badge variant="outline" className="text-xs">
-            {task.category}
-          </Badge>
-        </div>
-
-        {task.tags && task.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {task.tags.map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-xs">
-                {tag}
-              </Badge>
-            ))}
+        <div className="flex items-center justify-between text-sm">
+          <Badge variant="outline">{task.category}</Badge>
+          <div className="flex items-center text-gray-500">
+            <Calendar className="w-4 h-4 mr-1" />
+            <span>{formatDistanceToNow(new Date(task.createdAt), { addSuffix: true })}</span>
           </div>
-        )}
+        </div>
+
+        {/* Task Type and Assignment Info */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center">
+              {task.taskType === 'single' ? (
+                <User className="w-4 h-4 mr-1 text-blue-600" />
+              ) : (
+                <Users className="w-4 h-4 mr-1 text-green-600" />
+              )}
+              <span className="text-gray-600">
+                {task.taskType === 'single' ? 'Single Person' : 'Multiple People'}
+              </span>
+            </div>
+            {task.taskType === 'multiple' && (
+              <span className="text-sm text-gray-500">
+                {task.currentCompletions || 0}/{task.maxCompletions || 1} completed
+              </span>
+            )}
+          </div>
+
+          {task.assignedUserId && (
+            <div className="text-sm text-blue-600 bg-blue-50 p-2 rounded">
+              Assigned to: {task.assignedUserName}
+            </div>
+          )}
+        </div>
 
         {task.requirements && task.requirements.length > 0 && (
-          <div className="space-y-2">
-            <h4 className="text-sm font-medium text-gray-700">Requirements:</h4>
-            <ul className="text-sm text-gray-600 space-y-1">
-              {task.requirements.map((req, index) => (
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-gray-700">Requirements:</p>
+            <ul className="text-xs text-gray-600 space-y-1">
+              {task.requirements.slice(0, 2).map((req, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full mt-2 mr-2 flex-shrink-0" />
-                  {req}
+                  <span className="w-1 h-1 bg-gray-400 rounded-full mt-1.5 mr-2 flex-shrink-0" />
+                  <span className="line-clamp-1">{req}</span>
                 </li>
               ))}
+              {task.requirements.length > 2 && (
+                <li className="text-gray-500">+{task.requirements.length - 2} more...</li>
+              )}
             </ul>
           </div>
         )}
-      </CardContent>
 
-      {showActions && (
-        <CardFooter className="pt-4">
-          {getActionButtons()}
-        </CardFooter>
-      )}
+        {task.tags && task.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {task.tags.slice(0, 3).map((tag, index) => (
+              <Badge key={index} variant="secondary" className="text-xs">
+                {tag}
+              </Badge>
+            ))}
+            {task.tags.length > 3 && (
+              <Badge variant="secondary" className="text-xs">
+                +{task.tags.length - 3}
+              </Badge>
+            )}
+          </div>
+        )}
+
+        {renderActions()}
+      </CardContent>
     </Card>
   );
 }
