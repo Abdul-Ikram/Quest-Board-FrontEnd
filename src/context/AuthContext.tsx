@@ -1,14 +1,75 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { AuthContextType, User } from '@/types';
+import { AuthContextType, User, SubscriptionPlan } from '@/types';
 import { toast } from '@/hooks/use-toast';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock users for demo with wallet balances
+// Subscription plans configuration
+const subscriptionPlans: Record<string, SubscriptionPlan> = {
+  free: {
+    name: 'free',
+    userTasksLimit: 5,
+    uploaderTasksLimit: 3,
+    registrationFee: 0,
+    monthlyFee: 0
+  },
+  starter: {
+    name: 'starter',
+    userTasksLimit: 50,
+    uploaderTasksLimit: 25,
+    registrationFee: 10,
+    monthlyFee: 29
+  },
+  pro: {
+    name: 'pro',
+    userTasksLimit: -1, // unlimited
+    uploaderTasksLimit: -1, // unlimited
+    registrationFee: 25,
+    monthlyFee: 99
+  }
+};
+
+// Mock users for demo with subscription data
 const mockUsers: User[] = [
-  { id: '1', email: 'admin@taskflow.com', name: 'Admin User', role: 'admin', walletBalance: 0 },
-  { id: '2', email: 'uploader@taskflow.com', name: 'Task Creator', role: 'uploader', walletBalance: 500 },
-  { id: '3', email: 'user@taskflow.com', name: 'Task Worker', role: 'user', walletBalance: 125 },
+  { 
+    id: '1', 
+    email: 'admin@taskflow.com', 
+    name: 'Admin User', 
+    role: 'admin', 
+    walletBalance: 0,
+    subscriptionPlan: 'pro',
+    subscriptionStatus: 'active',
+    isApproved: true,
+    registrationFee: 0,
+    monthlyTasksUsed: 0,
+    monthlyTasksLimit: -1
+  },
+  { 
+    id: '2', 
+    email: 'uploader@taskflow.com', 
+    name: 'Task Creator', 
+    role: 'uploader', 
+    walletBalance: 500,
+    subscriptionPlan: 'starter',
+    subscriptionStatus: 'active',
+    isApproved: true,
+    registrationFee: 10,
+    monthlyTasksUsed: 5,
+    monthlyTasksLimit: 25
+  },
+  { 
+    id: '3', 
+    email: 'user@taskflow.com', 
+    name: 'Task Worker', 
+    role: 'user', 
+    walletBalance: 125,
+    subscriptionPlan: 'free',
+    subscriptionStatus: 'active',
+    isApproved: true,
+    registrationFee: 0,
+    monthlyTasksUsed: 2,
+    monthlyTasksLimit: 5
+  },
 ];
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -51,23 +112,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signup = async (email: string, password: string, name: string, role: 'uploader' | 'user') => {
+  const signup = async (email: string, password: string, name: string, role: 'uploader' | 'user', plan: 'free' | 'starter' | 'pro') => {
     setLoading(true);
     try {
-      // Mock user creation
+      const selectedPlan = subscriptionPlans[plan];
+      
+      // Mock user creation with subscription plan
       const newUser: User = {
         id: Date.now().toString(),
         email,
         name,
         role,
-        walletBalance: role === 'uploader' ? 100 : 0, // Give uploaders starting balance
+        walletBalance: 0,
+        subscriptionPlan: plan,
+        subscriptionStatus: plan === 'free' ? 'active' : 'pending', // Free plan is immediately active
+        isApproved: false, // All new users need admin approval
+        registrationFee: selectedPlan.registrationFee,
+        monthlyTasksUsed: 0,
+        monthlyTasksLimit: role === 'user' ? selectedPlan.userTasksLimit : selectedPlan.uploaderTasksLimit
       };
+
       setUser(newUser);
       localStorage.setItem('taskflow_user', JSON.stringify(newUser));
-      toast({
-        title: "Account created!",
-        description: `Welcome to TaskFlow as a ${role}`,
-      });
+      
+      if (plan === 'free') {
+        toast({
+          title: "Account created!",
+          description: `Welcome to TaskFlow! Your account is pending admin approval.`,
+        });
+      } else {
+        toast({
+          title: "Account created!",
+          description: `Please pay the registration fee of $${selectedPlan.registrationFee} to activate your ${plan} plan.`,
+        });
+      }
     } catch (error) {
       toast({
         title: "Signup failed",
