@@ -5,6 +5,12 @@ export interface User {
   role: 'uploader' | 'admin' | 'user';
   avatar?: string;
   walletBalance: number;
+  subscriptionPlan: 'free' | 'starter' | 'pro';
+  subscriptionStatus: 'active' | 'inactive' | 'pending';
+  isApproved: boolean; // New field for admin approval
+  registrationFee: number; // Fee paid for registration
+  monthlyTasksUsed: number; // Track monthly usage
+  monthlyTasksLimit: number; // Based on subscription plan
 }
 
 export interface Task {
@@ -45,7 +51,7 @@ export interface TaskSubmission {
 export interface WalletTransaction {
   id: string;
   userId: string;
-  type: 'deposit' | 'withdrawal' | 'payment' | 'earning' | 'escrow_hold' | 'escrow_release';
+  type: 'deposit' | 'withdrawal' | 'payment' | 'earning' | 'escrow_hold' | 'escrow_release' | 'registration_fee';
   amount: number;
   description: string;
   taskId?: string;
@@ -53,10 +59,18 @@ export interface WalletTransaction {
   createdAt: string;
 }
 
+export interface SubscriptionPlan {
+  name: 'free' | 'starter' | 'pro';
+  userTasksLimit: number; // -1 for unlimited
+  uploaderTasksLimit: number; // -1 for unlimited
+  registrationFee: number;
+  monthlyFee: number;
+}
+
 export interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string, name: string, role: 'uploader' | 'user') => Promise<void>;
+  signup: (email: string, password: string, name: string, role: 'uploader' | 'user', plan: 'free' | 'starter' | 'pro') => Promise<void>;
   logout: () => void;
   loading: boolean;
 }
