@@ -18,6 +18,7 @@ import {
   Eye,
   Clipboard,
   Wallet,
+  User,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -28,6 +29,7 @@ const uploaderLinks = [
   { to: '/uploader/audit', icon: Eye, label: 'Audit Tasks' },
   { to: '/uploader/completed', icon: CheckCircle, label: 'Completed' },
   { to: '/uploader/wallet', icon: Wallet, label: 'Wallet' },
+  { to: '/uploader/profile', icon: User, label: 'Profile' },
 ];
 
 const adminLinks = [
@@ -35,6 +37,7 @@ const adminLinks = [
   { to: '/admin/pending', icon: Clipboard, label: 'Pending Approval' },
   { to: '/admin/approved', icon: CheckCircle, label: 'Approved Tasks' },
   { to: '/admin/users', icon: Users, label: 'Manage Users' },
+  { to: '/admin/profile', icon: User, label: 'Profile' },
 ];
 
 const userLinks = [
@@ -43,6 +46,7 @@ const userLinks = [
   { to: '/user/submissions', icon: Upload, label: 'My Submissions' },
   { to: '/user/completed', icon: CheckCircle, label: 'Completed' },
   { to: '/user/wallet', icon: Wallet, label: 'Wallet' },
+  { to: '/user/profile', icon: User, label: 'Profile' },
 ];
 
 export function Sidebar() {
