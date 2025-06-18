@@ -21,16 +21,20 @@ import { AddTask } from '@/pages/uploader/AddTask';
 import { MyTasks } from '@/pages/uploader/MyTasks';
 import { AuditTasks } from '@/pages/uploader/AuditTasks';
 import { UploaderWallet } from '@/pages/uploader/Wallet';
+import { UploaderProfile } from '@/pages/uploader/Profile';
 
 // Admin pages
 import { AdminDashboard } from '@/pages/admin/Dashboard';
 import { PendingTasks } from '@/pages/admin/PendingTasks';
 import { PendingUsers } from '@/pages/admin/PendingUsers';
+import { AdminProfile } from '@/pages/admin/Profile';
 
 // User pages
 import { UserDashboard } from '@/pages/user/Dashboard';
 import { AvailableTasks } from '@/pages/user/AvailableTasks';
 import { UserWallet } from '@/pages/user/Wallet';
+import { UserProfile } from '@/pages/user/Profile';
+import { TaskSubmissions } from '@/pages/user/TaskSubmissions';
 
 function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode; allowedRoles: string[] }) {
   const { user, loading } = useAuth();
@@ -150,6 +154,14 @@ function AppRoutes() {
             </ProtectedRoute>
           } 
         />
+        <Route 
+          path="/uploader/profile" 
+          element={
+            <ProtectedRoute allowedRoles={['uploader']}>
+              <UploaderProfile />
+            </ProtectedRoute>
+          } 
+        />
 
         {/* Admin routes */}
         <Route 
@@ -185,6 +197,14 @@ function AppRoutes() {
             </ProtectedRoute>
           } 
         />
+        <Route 
+          path="/admin/profile" 
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminProfile />
+            </ProtectedRoute>
+          } 
+        />
 
         {/* User routes */}
         <Route 
@@ -207,7 +227,7 @@ function AppRoutes() {
           path="/user/submissions" 
           element={
             <ProtectedRoute allowedRoles={['user']}>
-              <UserDashboard />
+              <TaskSubmissions />
             </ProtectedRoute>
           } 
         />
@@ -224,6 +244,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute allowedRoles={['user']}>
               <UserWallet />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/user/profile" 
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <UserProfile />
             </ProtectedRoute>
           } 
         />
