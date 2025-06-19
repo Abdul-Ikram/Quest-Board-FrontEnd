@@ -1,5 +1,36 @@
+<h1 align="center">🚀 QUEST-BOARD-FRONTEND</h1>
 
-# 🧭 Quest-Board
+<p align="center"><em>Empowering Seamless Task Management and Collaboration</em></p>
+
+<p align="center">
+  <img src="https://img.shields.io/github/last-commit/Abdul-Ikram/quest-board-frontend?style=for-the-badge&label=last%20commit" />
+  <img src="https://img.shields.io/github/languages/top/Abdul-Ikram/quest-board-frontend?style=for-the-badge&label=typescript" />
+  <img src="https://img.shields.io/github/languages/count/Abdul-Ikram/quest-board-frontend?style=for-the-badge&label=languages" />
+</p>
+
+---
+
+### <p align="center"><em>Built with the tools and technologies:</em></p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/-JSON-000?style=for-the-badge&logo=json&logoColor=white" />
+  <img src="https://img.shields.io/badge/-Markdown-000?style=for-the-badge&logo=markdown&logoColor=white" />
+  <img src="https://img.shields.io/badge/-npm-CB3837?style=for-the-badge&logo=npm&logoColor=white" />
+  <img src="https://img.shields.io/badge/-Autoprefixer-DD3735?style=for-the-badge&logo=autoprefixer&logoColor=white" />
+  <img src="https://img.shields.io/badge/-PostCSS-DD3A0A?style=for-the-badge&logo=postcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/-JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
+  <img src="https://img.shields.io/badge/-React-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
+  <br />
+  <img src="https://img.shields.io/badge/-TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/-Zod-4B4B4B?style=for-the-badge&logoColor=white" />
+  <img src="https://img.shields.io/badge/-Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" />
+  <img src="https://img.shields.io/badge/-ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" />
+  <img src="https://img.shields.io/badge/-dateFns-0078D4?style=for-the-badge&logoColor=white" />
+  <img src="https://img.shields.io/badge/-React%20Hook%20Form-EC5990?style=for-the-badge&logo=reacthookform&logoColor=white" />
+</p>
+
+<br>
+
 
 **Quest-Board** is a task management frontend built with **React**. It enables uploaders to post tasks, users to complete them, and admins to review submissions. Approved tasks reward users with points, encouraging accountability and engagement through a rewarding experience.
 
