@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useTask } from '@/context/TaskContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,7 +8,6 @@ import {
   FileText,
   DollarSign,
   CheckCircle,
-  Clock,
   Trophy,
   TrendingUp,
   Zap
@@ -158,7 +156,7 @@ export function UserDashboard() {
                     <p className="text-xs text-gray-500">{task.category}</p>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Badge className="bg-green-100 text-green-800">
+                    <Badge className="bg-green-100 hover:bg-green-200 text-green-800">
                       ${task.reward}
                     </Badge>
                     <Link to="/user/tasks">
