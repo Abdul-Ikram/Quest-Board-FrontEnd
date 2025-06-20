@@ -293,15 +293,17 @@ export function AddTask() {
                 name="category"
                 value={formData.category}
                 onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md "
                 required
               >
                 <option value="">Select a category</option>
+                <div className="w-full flex items-center justify-center pt-3">
                 {categories.map((category) => (
                   <option key={category} value={category}>
                     {category}
                   </option>
                 ))}
+                </div>
               </select>
             </div>
 

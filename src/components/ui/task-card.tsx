@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -28,19 +27,19 @@ export function TaskCard({ task, onAction, showActions = false, actionType }: Ta
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-yellow-100 hover:bg-yellow-200 text-yellow-800';
       case 'approved':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-100 text-green-800 hover:bg-green-200';
       case 'in_progress':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-blue-100 hover:bg-blue-100 text-blue-800';
       case 'submitted':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-purple-100 hover:bg-purple-100 text-purple-800';
       case 'completed':
-        return 'bg-emerald-100 text-emerald-800';
+        return 'bg-emerald-100 hover:bg-emerald-100 text-emerald-800';
       case 'rejected':
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-100 hover:bg-red-100 text-red-800';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-100 hover:bg-gray-100  text-gray-800';
     }
   };
 

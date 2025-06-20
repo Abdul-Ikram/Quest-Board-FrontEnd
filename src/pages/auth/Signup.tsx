@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { FileText, Mail, Lock, User, ArrowRight, Upload, CheckCircle, Crown, Star, Infinity } from 'lucide-react';
+import { FileText, Mail, Lock, User, ArrowRight, Upload, CheckCircle, Crown, Star } from 'lucide-react';
 
 const subscriptionPlans = [
   {

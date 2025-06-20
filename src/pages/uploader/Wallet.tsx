@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useTask } from '@/context/TaskContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -313,13 +313,13 @@ export function UploaderWallet() {
                                 <DollarSign className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
                                 <Input
                                     id="depositAmount"
-                                    type="number"
-                                    placeholder="0.00"
+                                    type="text"
+                                    placeholder="0000"
                                     value={depositAmount}
                                     onChange={(e) => setDepositAmount(e.target.value)}
-                                    className="pl-10"
+                                    className="pl-10 bg-white"
                                     min="0"
-                                    step="0.01"
+                                    step="0000"
                                 />
                             </div>
                         </div>

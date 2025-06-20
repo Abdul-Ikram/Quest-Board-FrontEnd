@@ -9,7 +9,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { Landing } from '@/pages/Landing';
 
 // Auth pages
-import { Login } from '@/pages/auth/Login';
+import { Login } from './pages/auth/login';
 import { Signup } from '@/pages/auth/Signup';
 import { ForgotPassword } from '@/pages/auth/ForgotPassword';
 import { VerifyOTP } from '@/pages/auth/VerifyOTP';

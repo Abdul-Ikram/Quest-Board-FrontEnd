@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTask } from '@/context/TaskContext';
 import { TaskCard } from '@/components/ui/task-card';
 import { Card, CardContent } from '@/components/ui/card';

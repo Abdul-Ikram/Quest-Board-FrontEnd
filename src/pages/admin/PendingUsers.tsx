@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -209,8 +209,8 @@ export function PendingUsers() {
                                 <CardHeader className="pb-3">
                                     <div className="flex items-start justify-between">
                                         <div className="flex items-center space-x-3">
-                                            <Avatar className="w-12 h-12">
-                                                <AvatarImage src={user.avatar} />
+                                            <Avatar className="size-12 shrink-0 object-cover">
+                                                <img className='w-full shrink-0' src={user.avatar} />
                                                 <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                                             </Avatar>
                                             <div>
@@ -221,7 +221,7 @@ export function PendingUsers() {
                                                 </CardDescription>
                                             </div>
                                         </div>
-                                        <Badge className="bg-yellow-100 text-yellow-800">
+                                        <Badge className="bg-yellow-100 hover:bg-yellow-200 text-yellow-800">
                                             <Clock className="w-3 h-3 mr-1" />
                                             Pending
                                         </Badge>

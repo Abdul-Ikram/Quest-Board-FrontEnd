@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useTask } from '@/context/TaskContext';
@@ -106,7 +105,7 @@ export function Sidebar() {
               <Wallet className="w-4 h-4 text-green-600" />
               <span className="text-sm font-medium">Balance</span>
             </div>
-            <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+            <Badge className="bg-green-100 hover:bg-green-200 text-green-800 dark:bg-green-900 dark:text-green-100">
               ${userBalance}
             </Badge>
           </div>
@@ -121,9 +120,9 @@ export function Sidebar() {
             to={link.to}
             className={({ isActive }) =>
               cn(
-                "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-white",
                 isActive
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-primary hover:text-white hover:bg-primary/80"
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
               )
             }

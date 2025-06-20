@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useTask } from '@/context/TaskContext';
 import { TaskCard } from '@/components/ui/task-card';
@@ -16,14 +16,14 @@ export function MyTasks() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const myTasks = tasks.filter(task => task.uploaderId === user?.id);
-  
+
   const filterTasks = (status?: string) => {
     let filtered = myTasks;
-    
+
     if (status) {
       filtered = filtered.filter(task => task.status === status);
     }
-    
+
     if (searchQuery) {
       filtered = filtered.filter(task =>
         task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -31,7 +31,7 @@ export function MyTasks() {
         task.category.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-    
+
     return filtered;
   };
 
@@ -90,7 +90,7 @@ export function MyTasks() {
 
       {/* Tasks Tabs */}
       <Tabs defaultValue="all" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-7 gap-2">
           <TabsTrigger value="all" className="relative">
             All
             {statusCounts.all > 0 && (
@@ -153,9 +153,9 @@ export function MyTasks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterTasks().length > 0 ? (
               filterTasks().map((task) => (
-                <TaskCard 
-                  key={task.id} 
-                  task={task} 
+                <TaskCard
+                  key={task.id}
+                  task={task}
                   onAction={handleTaskAction}
                   showActions={true}
                   actionType="uploader"
@@ -173,9 +173,9 @@ export function MyTasks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterTasks('pending').length > 0 ? (
               filterTasks('pending').map((task) => (
-                <TaskCard 
-                  key={task.id} 
-                  task={task} 
+                <TaskCard
+                  key={task.id}
+                  task={task}
                   onAction={handleTaskAction}
                   showActions={true}
                   actionType="uploader"
@@ -193,9 +193,9 @@ export function MyTasks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterTasks('approved').length > 0 ? (
               filterTasks('approved').map((task) => (
-                <TaskCard 
-                  key={task.id} 
-                  task={task} 
+                <TaskCard
+                  key={task.id}
+                  task={task}
                   onAction={handleTaskAction}
                   showActions={true}
                   actionType="uploader"
@@ -213,9 +213,9 @@ export function MyTasks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterTasks('in_progress').length > 0 ? (
               filterTasks('in_progress').map((task) => (
-                <TaskCard 
-                  key={task.id} 
-                  task={task} 
+                <TaskCard
+                  key={task.id}
+                  task={task}
                   onAction={handleTaskAction}
                   showActions={true}
                   actionType="uploader"
@@ -233,9 +233,9 @@ export function MyTasks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterTasks('submitted').length > 0 ? (
               filterTasks('submitted').map((task) => (
-                <TaskCard 
-                  key={task.id} 
-                  task={task} 
+                <TaskCard
+                  key={task.id}
+                  task={task}
                   onAction={handleTaskAction}
                   showActions={true}
                   actionType="uploader"
@@ -253,9 +253,9 @@ export function MyTasks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterTasks('completed').length > 0 ? (
               filterTasks('completed').map((task) => (
-                <TaskCard 
-                  key={task.id} 
-                  task={task} 
+                <TaskCard
+                  key={task.id}
+                  task={task}
                   onAction={handleTaskAction}
                   showActions={true}
                   actionType="uploader"
@@ -273,9 +273,9 @@ export function MyTasks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterTasks('rejected').length > 0 ? (
               filterTasks('rejected').map((task) => (
-                <TaskCard 
-                  key={task.id} 
-                  task={task} 
+                <TaskCard
+                  key={task.id}
+                  task={task}
                   onAction={handleTaskAction}
                   showActions={true}
                   actionType="uploader"
