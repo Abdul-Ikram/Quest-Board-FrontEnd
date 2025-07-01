@@ -137,14 +137,14 @@ export function Signup() {
               {/* Basic Information */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
+                  <Label htmlFor="name">Username</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
                     <Input
                       id="name"
                       name="name"
                       type="text"
-                      placeholder="Enter your full name"
+                      placeholder="Enter your username"
                       value={formData.name}
                       onChange={handleInputChange}
                       className="pl-10"
