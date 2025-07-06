@@ -27,7 +27,9 @@ import {
     Lock,
     Star,
     Crown,
-    CheckCircle
+    CheckCircle,
+    Plus,
+    Trash2
 } from 'lucide-react';
 
 export function UploaderProfile() {
@@ -35,6 +37,7 @@ export function UploaderProfile() {
     const { tasks, getUserBalance } = useTask();
     const [isEditing, setIsEditing] = useState(false);
     const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+    const [newSpecialty, setNewSpecialty] = useState('');
     const [formData, setFormData] = useState({
         name: user?.name || '',
         email: user?.email || '',
@@ -63,6 +66,37 @@ export function UploaderProfile() {
             ...prev,
             [e.target.name]: e.target.value,
         }));
+    };
+
+    const handleAddSpecialty = () => {
+        if (newSpecialty.trim() && !formData.specialties.includes(newSpecialty.trim())) {
+            setFormData(prev => ({
+                ...prev,
+                specialties: [...prev.specialties, newSpecialty.trim()]
+            }));
+            setNewSpecialty('');
+            toast({
+                title: "Specialty added!",
+                description: `${newSpecialty.trim()} has been added to your specialties.`,
+            });
+        } else if (formData.specialties.includes(newSpecialty.trim())) {
+            toast({
+                title: "Specialty already exists",
+                description: "This specialty is already in your list.",
+                variant: "destructive",
+            });
+        }
+    };
+
+    const handleRemoveSpecialty = (specialtyToRemove: string) => {
+        setFormData(prev => ({
+            ...prev,
+            specialties: prev.specialties.filter(specialty => specialty !== specialtyToRemove)
+        }));
+        toast({
+            title: "Specialty removed!",
+            description: `${specialtyToRemove} has been removed from your specialties.`,
+        });
     };
 
     const handleSave = () => {
@@ -332,14 +366,76 @@ export function UploaderProfile() {
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <h4 className="font-medium">Specialties</h4>
+                            {/* Editable Specialties Section */}
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <h4 className="font-medium">Specialties</h4>
+                                    {isEditing && (
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => {
+                                                const input = document.getElementById('new-specialty-input') as HTMLInputElement;
+                                                input?.focus();
+                                            }}
+                                        >
+                                            <Plus className="w-3 h-3 mr-1" />
+                                            Add Specialty
+                                        </Button>
+                                    )}
+                                </div>
+
+                                {isEditing && (
+                                    <div className="flex gap-2">
+                                        <Input
+                                            id="new-specialty-input"
+                                            placeholder="Enter a new specialty..."
+                                            value={newSpecialty}
+                                            onChange={(e) => setNewSpecialty(e.target.value)}
+                                            onKeyPress={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    handleAddSpecialty();
+                                                }
+                                            }}
+                                            className="flex-1"
+                                        />
+                                        <Button
+                                            onClick={handleAddSpecialty}
+                                            disabled={!newSpecialty.trim()}
+                                            size="sm"
+                                        >
+                                            <Plus className="w-4 h-4" />
+                                        </Button>
+                                    </div>
+                                )}
+
                                 <div className="flex flex-wrap gap-2">
-                                    {formData.specialties.map((specialty) => (
-                                        <Badge key={specialty} variant="outline">
-                                            {specialty}
-                                        </Badge>
+                                    {formData.specialties.map((specialty, index) => (
+                                        <div key={index} className="relative group">
+                                            <Badge
+                                                variant="outline"
+                                                className={`${isEditing ? 'pr-8' : ''} transition-all duration-200`}
+                                            >
+                                                {specialty}
+                                                {isEditing && (
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="absolute -top-1 -right-1 h-5 w-5 p-0 bg-red-500 hover:bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        onClick={() => handleRemoveSpecialty(specialty)}
+                                                    >
+                                                        <X className="w-3 h-3" />
+                                                    </Button>
+                                                )}
+                                            </Badge>
+                                        </div>
                                     ))}
+                                    {formData.specialties.length === 0 && (
+                                        <p className="text-sm text-gray-500 italic">
+                                            {isEditing ? 'Add your first specialty above' : 'No specialties added yet'}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </div>

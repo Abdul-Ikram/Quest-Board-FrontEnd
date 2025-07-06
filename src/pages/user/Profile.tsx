@@ -28,7 +28,9 @@ import {
     Star,
     Crown,
     Trophy,
-    Clock
+    Clock,
+    Plus,
+    Trash2
 } from 'lucide-react';
 
 export function UserProfile() {
@@ -36,6 +38,7 @@ export function UserProfile() {
     const { tasks, submissions, getUserBalance } = useTask();
     const [isEditing, setIsEditing] = useState(false);
     const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+    const [newSkill, setNewSkill] = useState('');
     const [formData, setFormData] = useState({
         name: user?.name || '',
         email: user?.email || '',
@@ -68,6 +71,37 @@ export function UserProfile() {
             ...prev,
             [e.target.name]: e.target.value,
         }));
+    };
+
+    const handleAddSkill = () => {
+        if (newSkill.trim() && !formData.skills.includes(newSkill.trim())) {
+            setFormData(prev => ({
+                ...prev,
+                skills: [...prev.skills, newSkill.trim()]
+            }));
+            setNewSkill('');
+            toast({
+                title: "Skill added!",
+                description: `${newSkill.trim()} has been added to your skills.`,
+            });
+        } else if (formData.skills.includes(newSkill.trim())) {
+            toast({
+                title: "Skill already exists",
+                description: "This skill is already in your list.",
+                variant: "destructive",
+            });
+        }
+    };
+
+    const handleRemoveSkill = (skillToRemove: string) => {
+        setFormData(prev => ({
+            ...prev,
+            skills: prev.skills.filter(skill => skill !== skillToRemove)
+        }));
+        toast({
+            title: "Skill removed!",
+            description: `${skillToRemove} has been removed from your skills.`,
+        });
     };
 
     const handleSave = () => {
@@ -110,7 +144,7 @@ export function UserProfile() {
     const getPlanColor = () => {
         switch (user.subscriptionPlan) {
             case 'pro':
-                return 'bg-purple-100 hover:bg-purple-200 text-purple-800';
+                return 'bg-purple-100 text-purple-800';
             case 'starter':
                 return 'bg-blue-100 text-blue-800';
             default:
@@ -171,7 +205,7 @@ export function UserProfile() {
                         </div>
                         <div className="flex-1 space-y-2">
                             <div className="flex items-center space-x-2">
-                                <Badge className="bg-green-100 hover:bg-green-200 text-green-800">
+                                <Badge className="bg-green-100 text-green-800">
                                     <Target className="w-3 h-3 mr-1" />
                                     Task Worker
                                 </Badge>
@@ -179,7 +213,7 @@ export function UserProfile() {
                                     {getPlanIcon()}
                                     <span className="ml-1 capitalize">{user.subscriptionPlan}</span>
                                 </Badge>
-                                <Badge className="bg-green-100 hover:bg-green-200 text-green-800">Active</Badge>
+                                <Badge className="bg-green-100 text-green-800">Active</Badge>
                             </div>
                             {isEditing ? (
                                 <div className="space-y-3">
@@ -324,14 +358,76 @@ export function UserProfile() {
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <h4 className="font-medium">Skills</h4>
+                            {/* Editable Skills Section */}
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <h4 className="font-medium">Skills</h4>
+                                    {isEditing && (
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => {
+                                                const input = document.getElementById('new-skill-input') as HTMLInputElement;
+                                                input?.focus();
+                                            }}
+                                        >
+                                            <Plus className="w-3 h-3 mr-1" />
+                                            Add Skill
+                                        </Button>
+                                    )}
+                                </div>
+
+                                {isEditing && (
+                                    <div className="flex gap-2">
+                                        <Input
+                                            id="new-skill-input"
+                                            placeholder="Enter a new skill..."
+                                            value={newSkill}
+                                            onChange={(e) => setNewSkill(e.target.value)}
+                                            onKeyPress={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    handleAddSkill();
+                                                }
+                                            }}
+                                            className="flex-1"
+                                        />
+                                        <Button
+                                            onClick={handleAddSkill}
+                                            disabled={!newSkill.trim()}
+                                            size="sm"
+                                        >
+                                            <Plus className="w-4 h-4" />
+                                        </Button>
+                                    </div>
+                                )}
+
                                 <div className="flex flex-wrap gap-2">
-                                    {formData.skills.map((skill) => (
-                                        <Badge key={skill} variant="outline">
-                                            {skill}
-                                        </Badge>
+                                    {formData.skills.map((skill, index) => (
+                                        <div key={index} className="relative group">
+                                            <Badge
+                                                variant="outline"
+                                                className={`${isEditing ? 'pr-8' : ''} transition-all duration-200`}
+                                            >
+                                                {skill}
+                                                {isEditing && (
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="absolute -top-1 -right-1 h-5 w-5 p-0 bg-red-500 hover:bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        onClick={() => handleRemoveSkill(skill)}
+                                                    >
+                                                        <X className="w-3 h-3" />
+                                                    </Button>
+                                                )}
+                                            </Badge>
+                                        </div>
                                     ))}
+                                    {formData.skills.length === 0 && (
+                                        <p className="text-sm text-gray-500 italic">
+                                            {isEditing ? 'Add your first skill above' : 'No skills added yet'}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </div>
