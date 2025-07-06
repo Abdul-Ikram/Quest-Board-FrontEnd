@@ -4,12 +4,14 @@ import { useTask } from '@/context/TaskContext';
 import { TaskCard } from '@/components/ui/task-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
-import { Search, Filter, Target, Upload, Camera, FileText, User, Users } from 'lucide-react';
+import { Search, Filter, Target, Upload, Camera, User, Users } from 'lucide-react';
+// import { Search, Filter, Target, Upload, Camera, FileText, User, Users } from 'lucide-react';
 
 export function AvailableTasks() {
   const { user } = useAuth();

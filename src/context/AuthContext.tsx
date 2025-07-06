@@ -113,6 +113,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signup = async (email: string, password: string, name: string, role: 'uploader' | 'user', plan: 'free' | 'starter' | 'pro') => {
+    password = password
     setLoading(true);
     try {
       const selectedPlan = subscriptionPlans[plan];

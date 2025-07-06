@@ -1,15 +1,15 @@
-import React from 'react';
+// import React from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useTask } from '@/context/TaskContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/components/ui/button';
 import {
   Plus,
   FileText,
   Eye,
   CheckCircle,
-  DollarSign,
+  // DollarSign,
   TrendingUp,
   Clock,
   Users
@@ -18,11 +18,12 @@ import { Link } from 'react-router-dom';
 
 export function UploaderDashboard() {
   const { user } = useAuth();
-  const { tasks, submissions } = useTask();
+  const { tasks } = useTask();
+  // const { tasks, submissions } = useTask();
 
   const myTasks = tasks.filter(task => task.uploaderId === user?.id);
   const pendingTasks = myTasks.filter(task => task.status === 'pending');
-  const approvedTasks = myTasks.filter(task => task.status === 'approved');
+  // const approvedTasks = myTasks.filter(task => task.status === 'approved');
   const submittedTasks = myTasks.filter(task => task.status === 'submitted');
   const completedTasks = myTasks.filter(task => task.status === 'completed');
 
