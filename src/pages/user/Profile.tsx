@@ -60,6 +60,7 @@ export function UserProfile() {
     const mySubmissions = submissions.filter(sub => sub.userId === user.id);
     const completedTasks = mySubmissions.filter(sub => sub.status === 'approved');
     const pendingTasks = mySubmissions.filter(sub => sub.status === 'submitted');
+    console.log(pendingTasks);
     const userBalance = getUserBalance(user.id);
     const totalEarnings = completedTasks.reduce((sum, sub) => {
         const task = tasks.find(t => t.id === sub.taskId);
