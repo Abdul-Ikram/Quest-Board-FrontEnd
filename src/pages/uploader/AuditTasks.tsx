@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+// import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useTask } from '@/context/TaskContext';
 import { Button } from '@/components/ui/button';
@@ -15,7 +16,7 @@ import {
   ExternalLink,
   Calendar,
   User,
-  FileText,
+  // FileText,
   DollarSign
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';

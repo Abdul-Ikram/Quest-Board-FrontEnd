@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { toast } from '@/hooks/use-toast';
 import {
-    User,
+    // User,
     Mail,
     Upload,
     Edit,
@@ -29,7 +29,7 @@ import {
     Crown,
     CheckCircle,
     Plus,
-    Trash2
+    // Trash2
 } from 'lucide-react';
 
 export function UploaderProfile() {
