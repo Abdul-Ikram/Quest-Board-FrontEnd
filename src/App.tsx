@@ -9,7 +9,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { Landing } from '@/pages/Landing';
 
 // Auth pages
-import { Login } from './pages/auth/login';
+import { Login } from '@/pages/auth/Login';
 import { Signup } from '@/pages/auth/Signup';
 import { ForgotPassword } from '@/pages/auth/ForgotPassword';
 import { VerifyOTP } from '@/pages/auth/VerifyOTP';
@@ -26,6 +26,7 @@ import { UploaderProfile } from '@/pages/uploader/Profile';
 // Admin pages
 import { AdminDashboard } from '@/pages/admin/Dashboard';
 import { PendingTasks } from '@/pages/admin/PendingTasks';
+import { PendingSubmissions } from '@/pages/admin/PendingSubmissions';
 import { PendingUsers } from '@/pages/admin/PendingUsers';
 import { AdminProfile } from '@/pages/admin/Profile';
 
@@ -178,6 +179,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <PendingTasks />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/submissions" 
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <PendingSubmissions />
             </ProtectedRoute>
           } 
         />

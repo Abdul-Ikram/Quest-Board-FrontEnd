@@ -83,7 +83,7 @@ export function AvailableTasks() {
 
     toast({
       title: "Task submitted!",
-      description: "Your submission has been sent for review.",
+      description: "Your submission has been sent to admin for review.",
     });
 
     setShowSubmissionDialog(false);
