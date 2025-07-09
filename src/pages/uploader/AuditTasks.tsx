@@ -1,4 +1,4 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 // import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useTask } from '@/context/TaskContext';
@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 // import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 // import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { toast } from '@/hooks/use-toast';
+// import { toast } from '@/hooks/use-toast';
 import { 
   Eye, 
   // CheckCircle, 
@@ -23,10 +23,11 @@ import { formatDistanceToNow } from 'date-fns';
 
 export function AuditTasks() {
   const { user } = useAuth();
-  const { tasks, submissions, auditSubmission } = useTask();
-  const [selectedSubmission, setSelectedSubmission] = useState<any>(null);
-  const [auditNotes, setAuditNotes] = useState('');
-  const [showAuditDialog, setShowAuditDialog] = useState(false);
+  const { tasks, submissions } = useTask();
+  // const { tasks, submissions, auditSubmission } = useTask();
+  // const [selectedSubmission, setSelectedSubmission] = useState<any>(null);
+  // const [auditNotes, setAuditNotes] = useState('');
+  // const [showAuditDialog, setShowAuditDialog] = useState(false);
 
   const myTasks = tasks.filter(task => task.uploaderId === user?.id);
   const submittedTasks = myTasks.filter(task => task.status === 'submitted');
@@ -35,33 +36,33 @@ export function AuditTasks() {
     return submissions.find(sub => sub.taskId === taskId && sub.status === 'submitted');
   };
 
-  const handleAuditClick = (task: any) => {
-    const submission = getSubmissionForTask(task.id);
-    if (submission) {
-      setSelectedSubmission({ task, submission });
-      setAuditNotes('');
-      setShowAuditDialog(true);
-    }
-  };
+  // const handleAuditClick = (task: any) => {
+  //   const submission = getSubmissionForTask(task.id);
+  //   if (submission) {
+  //     setSelectedSubmission({ task, submission });
+  //     setAuditNotes('');
+  //     setShowAuditDialog(true);
+  //   }
+  // };
 
-  const handleAuditSubmit = (approved: boolean) => {
-    if (selectedSubmission) {
-      auditSubmission(
-        selectedSubmission.submission.id,
-        approved ? 'approved' : 'rejected',
-        auditNotes || undefined
-      );
+  // const handleAuditSubmit = (approved: boolean) => {
+  //   if (selectedSubmission) {
+  //     auditSubmission(
+  //       selectedSubmission.submission.id,
+  //       approved ? 'approved' : 'rejected',
+  //       auditNotes || undefined
+  //     );
 
-      toast({
-        title: approved ? "Task approved!" : "Task rejected",
-        description: `The submission has been ${approved ? 'approved' : 'rejected'}.`,
-      });
+  //     toast({
+  //       title: approved ? "Task approved!" : "Task rejected",
+  //       description: `The submission has been ${approved ? 'approved' : 'rejected'}.`,
+  //     });
 
-      setShowAuditDialog(false);
-      setSelectedSubmission(null);
-      setAuditNotes('');
-    }
-  };
+  //     setShowAuditDialog(false);
+  //     setSelectedSubmission(null);
+  //     setAuditNotes('');
+  //   }
+  // };
 
   return (
     <div className="p-6 space-y-6">
