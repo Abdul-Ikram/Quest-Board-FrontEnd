@@ -1,3 +1,4 @@
+// import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useTask } from '@/context/TaskContext';
@@ -34,8 +35,9 @@ const uploaderLinks = [
 const adminLinks = [
   { to: '/admin', icon: LayoutGrid, label: 'Dashboard' },
   { to: '/admin/pending', icon: Clipboard, label: 'Pending Approval' },
+  { to: '/admin/submissions', icon: Eye, label: 'Review Submissions' },
   { to: '/admin/approved', icon: CheckCircle, label: 'Approved Tasks' },
-  { to: '/admin/users', icon: Users, label: 'Manage Users' },
+  { to: '/admin/users', icon: Users, label: 'User Approvals' },
   { to: '/admin/profile', icon: User, label: 'Profile' },
 ];
 
@@ -105,7 +107,7 @@ export function Sidebar() {
               <Wallet className="w-4 h-4 text-green-600" />
               <span className="text-sm font-medium">Balance</span>
             </div>
-            <Badge className="bg-green-100 hover:bg-green-200 text-green-800 dark:bg-green-900 dark:text-green-100">
+            <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
               ${userBalance}
             </Badge>
           </div>
@@ -120,9 +122,9 @@ export function Sidebar() {
             to={link.to}
             className={({ isActive }) =>
               cn(
-                "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-white",
+                "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-primary hover:text-white hover:bg-primary/80"
+                  ? "bg-primary text-primary-foreground"
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
               )
             }

@@ -5,15 +5,15 @@ import { useTask } from '@/context/TaskContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
+// import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+// import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { toast } from '@/hooks/use-toast';
-import {
-  Eye,
-  CheckCircle,
-  XCircle,
-  ExternalLink,
+import { 
+  Eye, 
+  // CheckCircle, 
+  // XCircle, 
+  ExternalLink, 
   Calendar,
   User,
   // FileText,
@@ -30,7 +30,7 @@ export function AuditTasks() {
 
   const myTasks = tasks.filter(task => task.uploaderId === user?.id);
   const submittedTasks = myTasks.filter(task => task.status === 'submitted');
-
+  
   const getSubmissionForTask = (taskId: string) => {
     return submissions.find(sub => sub.taskId === taskId && sub.status === 'submitted');
   };
@@ -67,8 +67,8 @@ export function AuditTasks() {
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold">Audit Tasks</h1>
-        <p className="text-gray-600">Review and approve submitted task completions</p>
+        <h1 className="text-3xl font-bold">Task Status Overview</h1>
+        <p className="text-gray-600">Monitor the status of your task submissions</p>
       </div>
 
       {/* Stats */}
@@ -77,7 +77,7 @@ export function AuditTasks() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Pending Review</p>
+                <p className="text-sm font-medium text-gray-600">Submitted Tasks</p>
                 <p className="text-2xl font-bold">{submittedTasks.length}</p>
               </div>
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -86,7 +86,7 @@ export function AuditTasks() {
             </div>
           </CardContent>
         </Card>
-
+        
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -120,8 +120,8 @@ export function AuditTasks() {
 
       {/* Submissions to Review */}
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Submissions Awaiting Review</h2>
-
+        <h2 className="text-xl font-semibold">Task Submissions Status</h2>
+        
         {submittedTasks.length > 0 ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {submittedTasks.map((task) => {
@@ -140,7 +140,7 @@ export function AuditTasks() {
                       </Badge>
                     </div>
                   </CardHeader>
-
+                  
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center text-gray-600">
@@ -195,11 +195,12 @@ export function AuditTasks() {
                     <div className="flex gap-2 pt-2">
                       <Button
                         size="sm"
-                        onClick={() => handleAuditClick(task)}
+                        variant="outline"
+                        disabled
                         className="flex-1"
                       >
                         <Eye className="w-4 h-4 mr-1" />
-                        Review Submission
+                        Under Admin Review
                       </Button>
                     </div>
                   </CardContent>
@@ -211,9 +212,9 @@ export function AuditTasks() {
           <Card>
             <CardContent className="text-center py-12">
               <Eye className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No submissions to review</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No submitted tasks</h3>
               <p className="text-gray-600">
-                When workers complete your tasks, they'll appear here for review.
+                When workers complete your tasks, they'll appear here with their status.
               </p>
             </CardContent>
           </Card>
@@ -221,82 +222,6 @@ export function AuditTasks() {
       </div>
 
       {/* Audit Dialog */}
-      <Dialog open={showAuditDialog} onOpenChange={setShowAuditDialog}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Review Task Submission</DialogTitle>
-            <DialogDescription>
-              Carefully review the submission and provide feedback
-            </DialogDescription>
-          </DialogHeader>
-
-          {selectedSubmission && (
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <h3 className="font-medium">{selectedSubmission.task.title}</h3>
-                <p className="text-sm text-gray-600">{selectedSubmission.task.description}</p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="font-medium">Worker:</span> {selectedSubmission.submission.userName}
-                </div>
-                <div>
-                  <span className="font-medium">Reward:</span> ${selectedSubmission.task.reward}
-                </div>
-              </div>
-
-              {selectedSubmission.submission.submissionText && (
-                <div className="space-y-2">
-                  <Label className="font-medium">Submission Notes:</Label>
-                  <div className="bg-gray-50 p-3 rounded-lg text-sm">
-                    {selectedSubmission.submission.submissionText}
-                  </div>
-                </div>
-              )}
-
-              {selectedSubmission.submission.screenshotUrl && (
-                <div className="space-y-2">
-                  <Label className="font-medium">Screenshot:</Label>
-                  <img
-                    src={selectedSubmission.submission.screenshotUrl}
-                    alt="Task submission"
-                    className="w-full max-h-64 object-contain rounded-lg border"
-                  />
-                </div>
-              )}
-
-              <div className="space-y-2">
-                <Label htmlFor="auditNotes">Audit Notes (Optional)</Label>
-                <Textarea
-                  id="auditNotes"
-                  placeholder="Add any feedback or notes about this submission..."
-                  value={auditNotes}
-                  onChange={(e) => setAuditNotes(e.target.value)}
-                  className="min-h-[80px]"
-                />
-              </div>
-            </div>
-          )}
-
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setShowAuditDialog(false)}>
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={() => handleAuditSubmit(false)}
-            >
-              <XCircle className="w-4 h-4 mr-1" />
-              Reject
-            </Button>
-            <Button onClick={() => handleAuditSubmit(true)}>
-              <CheckCircle className="w-4 h-4 mr-1" />
-              Approve
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

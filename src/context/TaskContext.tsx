@@ -208,7 +208,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       if (task.taskType === 'single' && task.assignedUserId === submission.userId) {
         unassignTask(task.id);
       }
-      updateTaskStatus(task.id, 'approved');
+      // Keep task status as is, don't change it back to approved automatically
     }
   };
 
